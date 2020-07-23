@@ -22,7 +22,6 @@ function onKeyPress(event) {
 }
 ```
 
-
 ## License
 
 The MIT License.
