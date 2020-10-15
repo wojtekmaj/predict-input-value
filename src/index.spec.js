@@ -14,6 +14,24 @@ describe('predictInputValue()', () => {
     type: 'keydown',
   };
 
+  const targetWithCaretAfterThirdLetter = {
+    ...defaultEvent.target,
+    selectionStart: 3,
+    selectionEnd: 3,
+  };
+
+  const targetWithSecondLetterSelected = {
+    ...defaultEvent.target,
+    selectionStart: 1,
+    selectionEnd: 2,
+  };
+
+  const targetWithCaretAfterLastLetter = {
+    ...defaultEvent.target,
+    selectionStart: 5,
+    selectionEnd: 5,
+  };
+
   it('returns null for unsupported events', () => {
     const event = {
       ...defaultEvent,
@@ -58,70 +76,69 @@ describe('predictInputValue()', () => {
       const event = {
         ...defaultEvent,
         key: 'Backspace',
-        target: {
-          ...defaultEvent.target,
-          selectionStart: 1,
-          selectionEnd: 1,
-        },
+        target: targetWithCaretAfterThirdLetter,
       };
 
-      expect(predictInputValue(event)).toBe('ello');
+      expect(predictInputValue(event)).toBe('helo');
+    });
+
+    it('predicts value if Backspace is pressed at the end of the field', () => {
+      const event = {
+        ...defaultEvent,
+        key: 'Backspace',
+        target: targetWithCaretAfterLastLetter,
+      };
+
+      expect(predictInputValue(event)).toBe('hell');
     });
 
     it('predicts value if Backspace is pressed when text is selected', () => {
       const event = {
         ...defaultEvent,
         key: 'Backspace',
-        target: {
-          ...defaultEvent.target,
-          selectionStart: 1,
-          selectionEnd: 2,
-        },
+        target: targetWithSecondLetterSelected,
       };
 
       expect(predictInputValue(event)).toBe('hllo');
+    });
+
+    it('predicts value if a letter is typed at the beginning of the field', () => {
+      const event = {
+        ...defaultEvent,
+        key: 'a',
+      };
+
+      expect(predictInputValue(event)).toBe('ahello');
+    });
+
+    it('predicts value if a letter is typed in the middle of the field', () => {
+      const event = {
+        ...defaultEvent,
+        key: 'a',
+        target: targetWithCaretAfterThirdLetter,
+      };
+
+      expect(predictInputValue(event)).toBe('helalo');
     });
 
     it('predicts value if a letter is typed at the end of the field', () => {
       const event = {
         ...defaultEvent,
         key: 'a',
-        target: {
-          ...defaultEvent.target,
-          selectionStart: 5,
-          selectionEnd: 5,
-        },
+        target: targetWithCaretAfterLastLetter,
       };
 
       expect(predictInputValue(event)).toBe('helloa');
     });
 
-    it('predicts value if a letter is typed in the middle of the field', () => {
+    it('predicts value if a letter is typed when text is selected', () => {
       const event = {
         ...defaultEvent,
         key: 'a',
-        target: {
-          ...defaultEvent.target,
-          selectionStart: 3,
-          selectionEnd: 3,
-        },
+        target: targetWithSecondLetterSelected,
       };
 
-      expect(predictInputValue(event)).toBe('helalo');
-    });
-
-    it('predicts value if a letter is typed in the middle of the field', () => {
-      const event = {
-        ...defaultEvent,
-        key: 'a',
-        target: {
-          ...defaultEvent.target,
-          selectionStart: 3,
-          selectionEnd: 3,
-        },
-      };
-
-      expect(predictInputValue(event)).toBe('helalo');
+      expect(predictInputValue(event)).toBe('hallo');
     });
 
     it('predicts value if a letter is typed, but maxLength has been reached', () => {
@@ -129,10 +146,8 @@ describe('predictInputValue()', () => {
         ...defaultEvent,
         key: 'a',
         target: {
-          ...defaultEvent.target,
+          ...targetWithCaretAfterLastLetter,
           maxLength: 5,
-          selectionStart: 5,
-          selectionEnd: 5,
         },
       };
 
