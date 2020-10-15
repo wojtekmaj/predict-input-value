@@ -50,6 +50,16 @@ describe('predictInputValue()', () => {
     expect(predictInputValue(event)).toBe(null);
   });
 
+  it('returns null for meta keys in keydown events', () => {
+    const event = {
+      ...defaultEvent,
+      metaKey: false,
+      key: 'ArrowLeft',
+    };
+
+    expect(predictInputValue(event)).toBe(null);
+  });
+
   it('returns null for input type = "number"', () => {
     const event = {
       ...defaultEvent,

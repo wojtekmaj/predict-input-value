@@ -1,3 +1,15 @@
+const excludeList = [
+  'Alt',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'Enter',
+  'Escape',
+  'Shift',
+  'Tab',
+];
+
 /**
  * Predicts what the value will be after the next keyup given keydown event.
  *
@@ -12,6 +24,10 @@ export default function predictInputValue(event) {
 
   // Skip Cmd+A and other key combinations
   if (event.metaKey) {
+    return null;
+  }
+
+  if (excludeList.includes(event.key)) {
     return null;
   }
 
