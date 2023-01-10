@@ -1,165 +1,149 @@
 import predictInputValue from './index';
 
 describe('predictInputValue()', () => {
-  const defaultEvent = {
-    key: 'a',
-    metaKey: false,
-    target: {
-      maxLength: -1,
-      selectionEnd: 0,
-      selectionStart: 0,
-      type: 'text',
-      value: 'hello',
-    },
-    type: 'keydown',
-  };
+  const eventTarget = document.createElement('input');
+  eventTarget.value = 'hello';
+  eventTarget.selectionStart = 0;
+  eventTarget.selectionEnd = 0;
 
-  const targetWithCaretAfterThirdLetter = {
-    ...defaultEvent.target,
-    selectionStart: 3,
-    selectionEnd: 3,
-  };
+  const targetWithCaretAfterThirdLetter = document.createElement('input');
+  targetWithCaretAfterThirdLetter.value = 'hello';
+  targetWithCaretAfterThirdLetter.selectionStart = 3;
+  targetWithCaretAfterThirdLetter.selectionEnd = 3;
 
-  const targetWithSecondLetterSelected = {
-    ...defaultEvent.target,
-    selectionStart: 1,
-    selectionEnd: 2,
-  };
+  const targetWithSecondLetterSelected = document.createElement('input');
+  targetWithSecondLetterSelected.value = 'hello';
+  targetWithSecondLetterSelected.selectionStart = 1;
+  targetWithSecondLetterSelected.selectionEnd = 2;
 
-  const targetWithCaretAfterLastLetter = {
-    ...defaultEvent.target,
-    selectionStart: 5,
-    selectionEnd: 5,
-  };
+  const targetWithCaretAfterLastLetter = document.createElement('input');
+  targetWithCaretAfterLastLetter.value = 'hello';
+  targetWithCaretAfterLastLetter.selectionStart = 5;
+  targetWithCaretAfterLastLetter.selectionEnd = 5;
 
   it('returns null for unsupported events', () => {
-    const event = {
-      ...defaultEvent,
-      type: 'keyup',
-    };
+    const event = new KeyboardEvent('keyup');
 
     expect(predictInputValue(event)).toBe(null);
   });
 
   it('returns null for meta keys', () => {
-    const event = {
-      ...defaultEvent,
+    const event = new KeyboardEvent('keydown', {
       metaKey: true,
-    };
+    });
 
     expect(predictInputValue(event)).toBe(null);
   });
 
   it('returns null for meta keys in keydown events', () => {
-    const event = {
-      ...defaultEvent,
+    const event = new KeyboardEvent('keydown', {
       metaKey: false,
       key: 'ArrowLeft',
-    };
+    });
 
     expect(predictInputValue(event)).toBe(null);
   });
 
   it('returns null for input type = "number"', () => {
-    const event = {
-      ...defaultEvent,
-      target: {
-        ...defaultEvent.target,
-        type: 'number',
-      },
-    };
+    const eventTarget = document.createElement('input');
+    eventTarget.type = 'number';
+
+    const event = new KeyboardEvent('keydown');
+
+    eventTarget.dispatchEvent(event);
 
     expect(predictInputValue(event)).toBe(null);
   });
 
   describe('predicts value properly', () => {
     it('predicts value if Backspace is pressed at the beginning of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'Backspace',
-      };
+      });
+
+      eventTarget.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('hello');
     });
 
     it('predicts value if Backspace is pressed in the middle of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'Backspace',
-        target: targetWithCaretAfterThirdLetter,
-      };
+      });
+
+      targetWithCaretAfterThirdLetter.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('helo');
     });
 
     it('predicts value if Backspace is pressed at the end of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'Backspace',
-        target: targetWithCaretAfterLastLetter,
-      };
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('hell');
     });
 
     it('predicts value if Backspace is pressed when text is selected', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'Backspace',
-        target: targetWithSecondLetterSelected,
-      };
+      });
+
+      targetWithSecondLetterSelected.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('hllo');
     });
 
     it('predicts value if a letter is typed at the beginning of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'a',
-      };
+      });
+
+      eventTarget.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('ahello');
     });
 
     it('predicts value if a letter is typed in the middle of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'a',
-        target: targetWithCaretAfterThirdLetter,
-      };
+      });
+
+      targetWithCaretAfterThirdLetter.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('helalo');
     });
 
     it('predicts value if a letter is typed at the end of the field', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'a',
-        target: targetWithCaretAfterLastLetter,
-      };
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('helloa');
     });
 
     it('predicts value if a letter is typed when text is selected', () => {
-      const event = {
-        ...defaultEvent,
+      const event = new KeyboardEvent('keydown', {
         key: 'a',
-        target: targetWithSecondLetterSelected,
-      };
+      });
+
+      targetWithSecondLetterSelected.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('hallo');
     });
 
     it('predicts value if a letter is typed, but maxLength has been reached', () => {
-      const event = {
-        ...defaultEvent,
+      targetWithCaretAfterLastLetter.maxLength = 5;
+
+      const event = new KeyboardEvent('keydown', {
         key: 'a',
-        target: {
-          ...targetWithCaretAfterLastLetter,
-          maxLength: 5,
-        },
-      };
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
 
       expect(predictInputValue(event)).toBe('hello');
     });
