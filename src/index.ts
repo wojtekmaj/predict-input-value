@@ -16,7 +16,7 @@ const excludeList = [
  * @param {KeyboardEvent} event Keydown event
  * @returns {string} Predicted input value
  */
-export default function predictInputValue(event) {
+export default function predictInputValue(event: KeyboardEvent): string | null {
   // Support only keydown and keypress event
   if (event.type !== 'keydown' && event.type !== 'keypress') {
     return null;
@@ -33,6 +33,11 @@ export default function predictInputValue(event) {
 
   const { target: element } = event;
 
+  // Only support input and textarea elements
+  if (!(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement)) {
+    return null;
+  }
+
   // We can’t predict values in number inputs
   if (element.type === 'number') {
     return null;
@@ -40,6 +45,10 @@ export default function predictInputValue(event) {
 
   let { selectionStart } = element;
   const { selectionEnd } = element;
+
+  if (selectionStart === null || selectionEnd === null) {
+    return null;
+  }
 
   const nextValueArr = element.value.split('');
   let { key: replaceWith } = event;
