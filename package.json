@@ -1,6 +1,6 @@
 {
   "name": "@wojtekmaj/predict-input-value",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "Predicts the input value during KeyDown or KeyPress events, before the input is actually changed",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
