@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/@wojtekmaj/predict-input-value.svg)](https://www.npmjs.com/package/@wojtekmaj/predict-input-value) ![downloads](https://img.shields.io/npm/dt/@wojtekmaj/predict-input-value.svg) [![CI](https://github.com/wojtekmaj/predict-input-value/workflows/CI/badge.svg)](https://github.com/wojtekmaj/predict-input-value/actions) [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
+[![npm](https://img.shields.io/npm/v/@wojtekmaj/predict-input-value.svg)](https://www.npmjs.com/package/@wojtekmaj/predict-input-value) ![downloads](https://img.shields.io/npm/dt/@wojtekmaj/predict-input-value.svg) [![CI](https://github.com/wojtekmaj/predict-input-value/workflows/CI/badge.svg)](https://github.com/wojtekmaj/predict-input-value/actions)
 
 # Predict-Input-Value
 
