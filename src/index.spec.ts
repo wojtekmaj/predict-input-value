@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import predictInputValue from './index';
+import predictInputValue from './index.js';
 
 describe('predictInputValue()', () => {
   const eventTarget = document.createElement('input');
