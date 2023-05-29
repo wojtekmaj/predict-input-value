@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import predictInputValue from './index.js';
 
 describe('predictInputValue()', () => {
