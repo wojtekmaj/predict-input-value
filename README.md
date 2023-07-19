@@ -18,8 +18,8 @@ Conditions:
 - Selected text: `"ello"`
 - Key pressed: `i`
 
-```js
-function onKeyPress(event) {
+```ts
+function onKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {
   const nextValue = predictInputValue(event); // "hi"
 }
 ```
