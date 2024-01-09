@@ -59,7 +59,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wojtekmaj/predict-input-value.git"
+    "url": "git+https://github.com/wojtekmaj/predict-input-value.git"
   },
   "funding": "https://github.com/wojtekmaj/predict-input-value?sponsor=1",
   "packageManager": "yarn@4.0.2"
