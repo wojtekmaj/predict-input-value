@@ -15,7 +15,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@biomejs/biome@npm:^1.8.3":
+"@biomejs/biome@npm:1.8.3":
   version: 1.8.3
   resolution: "@biomejs/biome@npm:1.8.3"
   dependencies:
@@ -531,7 +531,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@wojtekmaj/predict-input-value@workspace:."
   dependencies:
-    "@biomejs/biome": "npm:^1.8.3"
+    "@biomejs/biome": "npm:1.8.3"
     happy-dom: "npm:^12.6.0"
     husky: "npm:^9.0.0"
     rimraf: "npm:^6.0.0"
