@@ -1,27 +1,34 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import predictInputValue from './index.js';
 
 describe('predictInputValue()', () => {
-  const eventTarget = document.createElement('input');
-  eventTarget.value = 'hello';
-  eventTarget.selectionStart = 0;
-  eventTarget.selectionEnd = 0;
+  let eventTarget: HTMLInputElement;
+  let targetWithCaretAfterThirdLetter: HTMLInputElement;
+  let targetWithSecondLetterSelected: HTMLInputElement;
+  let targetWithCaretAfterLastLetter: HTMLInputElement;
 
-  const targetWithCaretAfterThirdLetter = document.createElement('input');
-  targetWithCaretAfterThirdLetter.value = 'hello';
-  targetWithCaretAfterThirdLetter.selectionStart = 3;
-  targetWithCaretAfterThirdLetter.selectionEnd = 3;
+  beforeEach(() => {
+    eventTarget = document.createElement('input');
+    eventTarget.value = 'hello';
+    eventTarget.selectionStart = 0;
+    eventTarget.selectionEnd = 0;
 
-  const targetWithSecondLetterSelected = document.createElement('input');
-  targetWithSecondLetterSelected.value = 'hello';
-  targetWithSecondLetterSelected.selectionStart = 1;
-  targetWithSecondLetterSelected.selectionEnd = 2;
+    targetWithCaretAfterThirdLetter = document.createElement('input');
+    targetWithCaretAfterThirdLetter.value = 'hello';
+    targetWithCaretAfterThirdLetter.selectionStart = 3;
+    targetWithCaretAfterThirdLetter.selectionEnd = 3;
 
-  const targetWithCaretAfterLastLetter = document.createElement('input');
-  targetWithCaretAfterLastLetter.value = 'hello';
-  targetWithCaretAfterLastLetter.selectionStart = 5;
-  targetWithCaretAfterLastLetter.selectionEnd = 5;
+    targetWithSecondLetterSelected = document.createElement('input');
+    targetWithSecondLetterSelected.value = 'hello';
+    targetWithSecondLetterSelected.selectionStart = 1;
+    targetWithSecondLetterSelected.selectionEnd = 2;
+
+    targetWithCaretAfterLastLetter = document.createElement('input');
+    targetWithCaretAfterLastLetter.value = 'hello';
+    targetWithCaretAfterLastLetter.selectionStart = 5;
+    targetWithCaretAfterLastLetter.selectionEnd = 5;
+  });
 
   it('returns null for unsupported events', () => {
     const event = new KeyboardEvent('keyup');
@@ -63,9 +70,13 @@ describe('predictInputValue()', () => {
         key: 'Backspace',
       });
 
-      eventTarget.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('hello');
+      eventTarget.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('hello');
+      });
+
+      eventTarget.dispatchEvent(event);
     });
 
     it('predicts value if Backspace is pressed in the middle of the field', () => {
@@ -73,9 +84,13 @@ describe('predictInputValue()', () => {
         key: 'Backspace',
       });
 
-      targetWithCaretAfterThirdLetter.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('helo');
+      targetWithCaretAfterThirdLetter.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('helo');
+      });
+
+      targetWithCaretAfterThirdLetter.dispatchEvent(event);
     });
 
     it('predicts value if Backspace is pressed at the end of the field', () => {
@@ -83,9 +98,13 @@ describe('predictInputValue()', () => {
         key: 'Backspace',
       });
 
-      targetWithCaretAfterLastLetter.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('hell');
+      targetWithCaretAfterLastLetter.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('hell');
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
     });
 
     it('predicts value if Backspace is pressed when text is selected', () => {
@@ -93,9 +112,13 @@ describe('predictInputValue()', () => {
         key: 'Backspace',
       });
 
-      targetWithSecondLetterSelected.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('hllo');
+      targetWithSecondLetterSelected.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('hllo');
+      });
+
+      targetWithSecondLetterSelected.dispatchEvent(event);
     });
 
     it('predicts value if a letter is typed at the beginning of the field', () => {
@@ -103,9 +126,13 @@ describe('predictInputValue()', () => {
         key: 'a',
       });
 
-      eventTarget.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('ahello');
+      eventTarget.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('ahello');
+      });
+
+      eventTarget.dispatchEvent(event);
     });
 
     it('predicts value if a letter is typed in the middle of the field', () => {
@@ -113,9 +140,13 @@ describe('predictInputValue()', () => {
         key: 'a',
       });
 
-      targetWithCaretAfterThirdLetter.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('helalo');
+      targetWithCaretAfterThirdLetter.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('helalo');
+      });
+
+      targetWithCaretAfterThirdLetter.dispatchEvent(event);
     });
 
     it('predicts value if a letter is typed at the end of the field', () => {
@@ -123,9 +154,13 @@ describe('predictInputValue()', () => {
         key: 'a',
       });
 
-      targetWithCaretAfterLastLetter.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('helloa');
+      targetWithCaretAfterLastLetter.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('helloa');
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
     });
 
     it('predicts value if a letter is typed when text is selected', () => {
@@ -133,9 +168,13 @@ describe('predictInputValue()', () => {
         key: 'a',
       });
 
-      targetWithSecondLetterSelected.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('hallo');
+      targetWithSecondLetterSelected.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('hallo');
+      });
+
+      targetWithSecondLetterSelected.dispatchEvent(event);
     });
 
     it('predicts value if a letter is typed, but maxLength has been reached', () => {
@@ -145,9 +184,13 @@ describe('predictInputValue()', () => {
         key: 'a',
       });
 
-      targetWithCaretAfterLastLetter.dispatchEvent(event);
+      expect.assertions(1);
 
-      expect(predictInputValue(event)).toBe('hello');
+      targetWithCaretAfterLastLetter.addEventListener('keydown', () => {
+        expect(predictInputValue(event)).toBe('hello');
+      });
+
+      targetWithCaretAfterLastLetter.dispatchEvent(event);
     });
   });
 });
