@@ -1,6 +1,6 @@
 {
   "name": "@wojtekmaj/predict-input-value",
-  "version": "1.3.2",
+  "version": "2.0.0",
   "description": "Predicts the input value during KeyDown or KeyPress events, before the input is actually changed",
   "type": "module",
   "sideEffects": false,
